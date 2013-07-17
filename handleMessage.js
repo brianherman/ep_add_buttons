@@ -1,4 +1,4 @@
-    crypto = require('crypto'),
+var crypto = require('crypto'),
     padManager = require("ep_etherpad-lite/node/db/PadManager"),
     fs = require('fs'),
     md5sum = crypto.createHash('md5');
@@ -10,17 +10,26 @@ exports.handleMessage = function(hook_name, context, callback){
             // Write padId data to filesystem
             padManager.getPad(context.message.data.padId, null, function(err, value){
                     var hash = crypto.createHash('md5').update(context.message.data.padId).digest("hex");
-                    fs.writeFile("~/"+hash+'.c', value.atext.text, function(err) {
+                    fs.writeFile("/tmp/"+hash+'.c', value.atext.text, function(err) {
                         if(err){
-                        console.err("failed to write text to hashed location");
+                        console.log("failed to write text to hashed location");
                         }else{
                         console.log("Wrote pad contents to /tmp/"+hash+'.c');
                         // everything went great, we could tell the client here if we wanted..
-                        var child = require('child_process').exec('/usr/bin/emcc',
-                            ['/tmp/'+hash+'.c'], function(err, stdout, stderr) {
-                            // Node.js will invoke this callback when the
-                            console.log(stdout);
-                            });
+                            var spawn = require('child_process').spawn,
+                                ls    = spawn('emcc', ['"/tmp/"+hash+'.c']);
+
+                                ls.stdout.on('data', function (data) {
+                                      console.log('stdout: ' + data);
+                                });
+
+                                ls.stderr.on('data', function (data) {
+                                      console.log('stderr: ' + data);
+                                });
+
+                                ls.on('close', function (code) {
+                                      console.log('child process exited with code ' + code);
+                                });
 
                         }
                         });

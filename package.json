@@ -1,7 +1,7 @@
 {
   "name": "ep_add_buttons",
   "description": "Add two buttons to Etherpad and make them do something, oh and save the pads content to a file on the server..",
-  "version": "0.0.7",
+  "version": "0.0.16",
   "author": {
     "name": "John McLear",
     "email": "john@mclear.co.uk",
@@ -9,10 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/johnmclear/ep_add_buttons"
+    "url": "https://github.com/brianherman/ep_add_buttons"
   },
   "contributors": [],
-  "dependencies": {},
+  "dependencies": {
+      },
   "engines": {
     "node": "*"
   }
